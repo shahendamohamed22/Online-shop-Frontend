@@ -1,0 +1,260 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "IBM Plex Sans Arabic", sans-serif;
+}
+
+:root {
+  --main-color: #4BA54D;
+  --main-bg-color: white;
+  --text-gray: #4F545E;
+  --fs-large: 40px;
+  --fs-header: 40px;
+  --fs-games-header: 20px;
+  --fs-sm: 12px
+}
+
+.bg-main {
+  background-color: var(--main-color);
+}
+
+.bg-gray {
+  background-color: #ccc;
+}
+
+.color-gray {
+  color: #ccc;
+}
+
+.main-color {
+  color: var(--main-color);
+}
+
+.btn-main {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--main-color);
+  --bs-btn-border-color: var(--main-color);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #3c853d;
+  --bs-btn-hover-border-color: #146c43;
+  --bs-btn-focus-shadow-rgb: 60, 153, 110;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #146c43;
+  --bs-btn-active-border-color: #13653f;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--main-color);
+  --bs-btn-disabled-border-color: var(--main-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+nav {
+  right: 0;
+  left: 0;
+}
+.active-nav {
+    color: var(--main-color, green) !important;
+}
+
+main {
+  margin-bottom: 120px;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+}
+
+#carouselExampleIndicators {
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
+  height: auto;
+}
+
+.carousel-inner {
+  height: 100%;
+  height: 250px;
+  overflow: hidden;
+}
+
+.carousel-item {
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-item img {
+  transform: scale(1);
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #ccc;
+  opacity: 1;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: -10px;
+
+}
+
+.carousel-indicators .active {
+  background-color: var(--main-color);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  padding: 20px;
+  border: 2px solid var(--main-color);
+  border-radius: 50%;
+  /* aspect-ratio: 1; */
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #59c35bb9;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(-40%, -50%);
+}
+
+.carousel-control-next {
+  right: 0px;
+  transform: translate(40%, -50%);
+
+}
+
+.carousel-control-prev {
+  text-align: center;
+}
+
+.Ready-to-cook {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.shop-now {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.section-title {
+  color: white;
+  width: fit-content;
+  padding: 5px 10px;
+  border: 1px #146c43 solid;
+  background-color: #3c853d;
+  border-radius: 5px;
+}
+
+.sale-icons {
+  top: 5px;
+  z-index: 10;
+}
+
+.card-produt img {
+  width: 150px;
+  height: 150px;
+}
+
+.product.hidden {
+  display: none;
+}
+
+.heart{
+  cursor: pointer;
+}
+/* ######################################################### */
+
+
+.main-image-box {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    background-color: #fafafa;
+}
+
+
+/* تأثير خفيف عند تمرير الماوس فوق الصورة الأساسية */
+.main-image-box img:hover {
+    transform: scale(1.1);
+}
+
+
+/* === تجميل عمود البيانات والتفاصيل === */
+
+
+
+/* صندوق السعر  */
+
+/* أزرار الكمية والشراء */
+
+.quantity-selector {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background-color: #f5f5f5;
+    border: none;
+    width: 40px;
+    height: 45px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.qty-btn:hover {
+    background-color: #e5e5e5;
+}
+
+.quantity-selector input {
+    width: 50px;
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    outline: none;
+}
+
+
