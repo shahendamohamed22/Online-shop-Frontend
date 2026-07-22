@@ -87,7 +87,8 @@ nav {
 }
 
 main {
-  margin-bottom: 120px;
+  margin-top: 45px;
+  margin-bottom: 70px;
 }
 
 .logo {
@@ -258,3 +259,17 @@ main {
 }
 
 
+@media screen and (min-width:992px) {
+  .carousel-inner{
+    height: 350px;
+  }
+  .w-lg-50{
+    width: 50% !important ;
+  }
+
+  main {
+  margin-top: 200px;
+}
+
+
+}

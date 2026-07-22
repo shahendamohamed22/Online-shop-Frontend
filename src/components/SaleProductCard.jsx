@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
+import { useCart } from "../context/CartContext";
 
 // كارت أفقي مستخدم في قسم "الخصومات" بالصفحة الرئيسية فقط (تصميم مختلف عن كارت المتجر)
 
@@ -6,6 +8,12 @@ function SaleProductCard({ product }) {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const inWishlist = isInWishlist(product.id);
 
+   const navigate = useNavigate();
+  const { addToCart } = useCart();
+
+    const handleAddToCart = () => {
+    addToCart(product);
+  };
   return (
     <div className="col-12">
       <div className="card-produt border rounded-3 shadow">
@@ -32,7 +40,7 @@ function SaleProductCard({ product }) {
                   <h4 className="fs-6">{product.price} جنيه</h4>
                   <s className="text-danger">{product.oldPrice} جنية</s>
                 </div>
-                <button className="btn btn-main w-100 mt-2">
+                <button className="btn btn-main w-100 mt-2" onClick={handleAddToCart}>
                   <i className="fa-solid fa-cart-shopping"></i> اضف الى السلة
                 </button>
               </div>

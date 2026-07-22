@@ -11,7 +11,7 @@ function Navbar() {
     }`;
 
   return (
-    <nav className="fixed-bottom border-top border-2 py-1 shadow bg-light px-2">
+    <nav className="d-lg-none fixed-bottom border-top border-2 py-1 shadow bg-light px-2">
       <ul className="row pt-3">
         <li className="col-3 fs-5 text-black">
           <NavLink to="/wishlist" className={linkClass}>

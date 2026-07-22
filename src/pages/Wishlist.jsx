@@ -12,7 +12,7 @@ function Wishlist() {
 
   return (
     <main className="container">
-      <h2 className="badge bg-main mt-5 fs-3">المفضلة</h2>
+      <h2 className="badge bg-main mt-2 fs-3">المفضلة</h2>
       <div className="mt-3">
         <div className="row g-3">
           {wishlistProducts.length === 0 ? (

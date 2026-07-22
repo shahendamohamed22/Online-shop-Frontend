@@ -63,44 +63,46 @@ function VerifyCode() {
     }
 
     return (
-        <div className="container py-5">
-            <form
-                className="w-50 mx-auto shadow rounded p-4"
-                onSubmit={handleSubmit}
-            >
-                <h2 className="text-center mb-3">Verify OTP</h2>
+        <div className="min-vh-100 d-flex align-items-center justify-content-center ">
+            <div style={{ width: "100%", maxWidth: "500px" }} className="px-3">
+                <form
+                    className="mx-auto shadow-lg rounded p-4" style={{ maxWidth: "500px" }}
+                    onSubmit={handleSubmit}
+                >
+                    <h2 className="text-center mb-3">Verify OTP</h2>
 
-                <p className="text-center text-muted">
-                    Enter the 6-digit code sent to your email.
-                    <br />
-                    <span className="fw-semibold text-dark">{email}</span>
-                </p>
+                    <p className="text-center text-muted">
+                        Enter the 6-digit code sent to your email.
+                        <br />
+                        <span className="fw-semibold text-dark">{email}</span>
+                    </p>
 
-                <div className="d-flex justify-content-center gap-2 mb-4" dir="ltr">
-                    {otp.map((digit, index) => (
-                        <input
-                            key={index}
-                            id={`otp-${index}`}
-                            type="text"
-                            className="form-control text-center"
-                            style={{
-                                width: "55px",
-                                height: "55px",
-                                fontSize: "22px",
-                                fontWeight: "bold",
-                            }}
-                            value={digit}
-                            maxLength={1}
-                            onChange={(e) => handleChange(e, index)}
-                            onKeyDown={(e) => handleKeyDown(e, index)}
-                        />
-                    ))}
-                </div>
+                    <div className="d-flex justify-content-center gap-2 mb-4" dir="ltr">
+                        {otp.map((digit, index) => (
+                            <input
+                                key={index}
+                                id={`otp-${index}`}
+                                type="text"
+                                className="form-control text-center"
+                                style={{
+                                    width: "55px",
+                                    height: "55px",
+                                    fontSize: "22px",
+                                    fontWeight: "bold",
+                                }}
+                                value={digit}
+                                maxLength={1}
+                                onChange={(e) => handleChange(e, index)}
+                                onKeyDown={(e) => handleKeyDown(e, index)}
+                            />
+                        ))}
+                    </div>
 
-                <button className="btn btn-success w-100">
-                    Verify
-                </button>
-            </form>
+                    <button className="btn btn-success w-100">
+                        Verify
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

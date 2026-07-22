@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { getSaleProducts } from "../data/products";
-import SaleProductCard from "../components/SaleProductCard";
+import ProductCard from "../components/ProductCard";
 
 
 import robot1 from "../assets/imgs/Robot-1.png";
@@ -15,7 +15,7 @@ function Home() {
     <>
       <section className="container">
         {/* الكاروسيل شغال بـ Bootstrap JS (data-bs-*) اللي متعمول له import في main.jsx */}
-        <div id="carouselExampleIndicators" className="carousel slide">
+        <div id="carouselExampleIndicators" className="carousel slide w-lg-50">
           <div className="carousel-indicators">
             <button
               type="button"
@@ -90,7 +90,17 @@ function Home() {
         </header>
         <div className="row g-3 mt-3">
           {saleProducts.map((product) => (
-            <SaleProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+      <section className="container mt-5">
+        <header className="pe-2">
+          <h2 className="section-title fw-bold">العروض</h2>
+        </header>
+        <div className="row g-3 mt-3">
+          {saleProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>

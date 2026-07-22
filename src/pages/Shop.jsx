@@ -1,4 +1,5 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect , } from "react";
+import { Link } from "react-router-dom";
 import { products } from "../data/products";
 import ProductCard from "../components/ProductCard";
 import axios from "axios";
@@ -9,14 +10,13 @@ import baseUrl from "../services/Api";
 // وبنرندر بس اللي طابق - React بيتكفل بتحديث الشاشة تلقائي
 
 function Shop() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-    const [selectedSubCategory, setSelectedSubCategory] = useState("all");
+
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/category`); 
+        const response = await axios.get(`${baseUrl}/api/category`);
         setCategories(response.data);
         console.log(response)
       } catch (error) {
@@ -27,77 +27,32 @@ function Shop() {
     fetchCategories();
   }, []);
 
-   const handleCategoryClick = (id) => {
-    setSelectedCategory(id);
-    setSelectedSubCategory("all"); // نصفّر الفرعي كل ما نغيّر الرئيسي
-  };
 
-  const activeCategory = categories.find((c) => c.id === selectedCategory);
-  const currentSubcategories = activeCategory?.subCategories ?? [];
-
-  const filteredProducts =
-    selectedCategory === "all"
-      ? products
-      : products.filter((p) => p.category === selectedCategory);
-
+  const mainCategories = categories.filter((cat) => cat.parentCategoryId === null);
   return (
-     <>
-      {/* التابات الرئيسية */}
-      <div className="d-flex gap-2 justify-content-center mt-4 flex-wrap">
-        <button
-          className={`btn ${
-            selectedCategory === "all" ? "btn-main" : "btn-outline-secondary"
-          }`}
-          onClick={() => handleCategoryClick("all")}
-        >
-          الكل
-        </button>
-
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            className={`btn ${
-              selectedCategory === cat.id ? "btn-main" : "btn-outline-secondary"
-            }`}
-            onClick={() => handleCategoryClick(cat.id)}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
-
-         {/* التابات الفرعية - بتظهر بس لو الفئة المختارة عندها subCategories */}
-      {currentSubcategories.length > 0 && (
-        <div className="d-flex gap-2 justify-content-center mt-2 flex-wrap">
-          <button
-            className={`btn btn-sm ${
-              selectedSubCategory === "all" ? "btn-main" : "btn-outline-secondary"
-            }`}
-            onClick={() => setSelectedSubCategory("all")}
-          >
-            الكل
-          </button>
-          {currentSubcategories.map((sub) => (
-            <button
-              key={sub.id}
-              className={`btn btn-sm ${
-                selectedSubCategory === sub.id ? "btn-main" : "btn-outline-secondary"
-              }`}
-              onClick={() => setSelectedSubCategory(sub.id)}
-            >
-              {sub.name}
-            </button>
-          ))}
-        </div>
-      )}
+    <>
 
       <div className="container mt-4">
         <div className="row g-3">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {mainCategories.map((cat) => (
+            <Link
+              key={cat.id}
+              to={`/SubCategories/${cat.id}`}
+              className="col-6 col-md-4 col-lg-3 text-decoration-none text-black"
+            >
+              <div className="border rounded-4 overflow-hidden shadow text-center">
+                <img
+                  src={cat.imageUrl}
+                  alt={cat.name}
+                  style={{ height: "150px", objectFit: "cover" }}
+                />
+                <p className="p-2 mb-0 fw-bold">{cat.name}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
+
     </>
   );
 }

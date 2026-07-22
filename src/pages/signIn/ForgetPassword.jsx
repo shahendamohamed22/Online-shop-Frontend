@@ -43,50 +43,52 @@ function ForgotPassword() {
   }
 
   return (
-    <div className="container py-5">
-      <form
-        onSubmit={handleSubmit}
-        className="shadow rounded p-4 mx-auto"
-        style={{ maxWidth: "500px" }}
-      >
-        <h2 className="text-center mb-3">
-          Forgot Password
-        </h2>
-
-        <p className="text-center text-muted mb-4">
-          Enter your email and we'll send you a password reset link.
-        </p>
-
-        <div className="mb-4">
-          <label className="form-label">
-            Email
-          </label>
-
-          <input
-            type="email"
-            className="form-control"
-            placeholder="Enter your email"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button
-          className="btn btn-main w-100"
-          type="submit"
+    <div className="min-vh-100 d-flex align-items-center justify-content-center ">
+      <div style={{ width: "100%", maxWidth: "500px" }} className="px-3">
+        <form
+          onSubmit={handleSubmit}
+          className="shadow-lg rounded p-4 mx-auto"
+          style={{ maxWidth: "500px" }}
         >
-          Send Reset Link
-        </button>
+          <h2 className="text-center mb-3">
+            Forgot Password
+          </h2>
 
-        <p className="text-center mt-4">
-          Remember your password?{" "}
-          <Link to="/login">
-            Login
-          </Link>
-        </p>
-      </form>
+          <p className="text-center text-muted mb-4">
+            Enter your email and we'll send you a password reset link.
+          </p>
+
+          <div className="mb-4">
+            <label className="form-label">
+              Email
+            </label>
+
+            <input
+              type="email"
+              className="form-control"
+              placeholder="Enter your email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button
+            className="btn btn-main w-100"
+            type="submit"
+          >
+            Send Reset Link
+          </button>
+
+          <p className="text-center mt-4">
+            Remember your password?{" "}
+            <Link to="/login">
+              Login
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

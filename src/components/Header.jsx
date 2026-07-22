@@ -3,7 +3,7 @@ import logo from "../assets/imgs/logo.png";
 
 function Header() {
   return (
-    <header className="bg-main p-3 py-3 shadow container-fluid">
+    <header className="d-lg-none bg-main p-3 py-3 shadow container-fluid">
       <div className="row justify-content-between">
         <div className="col-2 d-flex gap-3 align-items-center">
           <i className="fa-solid fa-cart-shopping fa-xl"></i>

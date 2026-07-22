@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import baseUrl from "../../services/Api";
 
 function Register() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -53,6 +54,7 @@ function Register() {
       );
 
       console.log(response.data);
+      navigate("/");
 
     } catch (error) {
       console.log("STATUS:", error.response?.status);
@@ -60,40 +62,44 @@ function Register() {
     }
   }
 
-  async function handleGoogleSuccess(credentialResponse) {
-    const idToken = credentialResponse.credential;
-
-    console.log(idToken);
-
+  const handleGoogleAuth = async (token) => {
     try {
-      const response = await axios.post(
-        `${baseUrl}/api/customer/auth/google`,
-        {
-          idToken
-        }
-      );
+      const res = await axios.post(`${baseUrl}/api/customer/auth/google`, {
+        idToken: token,
+      });
 
-      console.log(response.data);
+      // لو نجح على طول (يعني مستخدم قديم) - سجّليه دخول عادي هنا
+      console.log(res.data);
+      if (res.data.requiresAdditionalInfo) {
+        localStorage.setItem("googleEmail", res.data.email);
+        localStorage.setItem("googleFirstName", res.data.firstName);
+        localStorage.setItem("googleLastName", res.data.lastName);
+        localStorage.setItem("googleIdToken", token);
 
-    } catch (error) {
+        navigate("/CompleteGoogleProfile");
+      } else {
+        localStorage.setItem("token", res.data.token);
+
+        navigate("/");
+      }
+    }
+    catch (error) {
+      console.log(error.response?.status);
       console.log(error.response?.data);
     }
   }
-
   return (
-    <div className="container py-5">
-      <form
-        onSubmit={handleSubmit}
-        className="shadow rounded p-4 mx-auto"
-        style={{ maxWidth: "500px" }}
-      >
-        <h2 className="text-center mb-4">
-          Create Account
-        </h2>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center py-4">
+  <div style={{ width: "100%", maxWidth: "600px" }} className="px-3">
+    <form
+      onSubmit={handleSubmit}
+      className="shadow-lg rounded-4 p-4 bg-white"
+    >
+      <h2 className="text-center mb-4">Create Account</h2>
 
-        <div className="mb-3">
+      <div className="row g-2 mb-3">
+        <div className="col-6">
           <label className="form-label">First Name</label>
-
           <input
             type="text"
             className="form-control"
@@ -103,9 +109,8 @@ function Register() {
             required
           />
         </div>
-        <div className="mb-3">
+        <div className="col-6">
           <label className="form-label">Last Name</label>
-
           <input
             type="text"
             className="form-control"
@@ -115,23 +120,23 @@ function Register() {
             required
           />
         </div>
+      </div>
 
-        <div className="mb-3">
-          <label className="form-label">Email</label>
+      <div className="mb-3">
+        <label className="form-label">Email</label>
+        <input
+          type="email"
+          className="form-control"
+          name="email"
+          value={user.email}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-          <input
-            type="email"
-            className="form-control"
-            name="email"
-            value={user.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-3">
+      <div className="row g-2 mb-3">
+        <div className="col-6">
           <label className="form-label">Phone</label>
-
           <input
             type="tel"
             className="form-control"
@@ -140,17 +145,15 @@ function Register() {
             onChange={handleChange}
           />
         </div>
-
-        <div>
-          <label className="form-label">Preferred brunch</label>
+        <div className="col-6">
+          <label className="form-label">Branch</label>
           <select
-            className="form-select mb-3"
+            className="form-select"
             name="preferredBranchId"
             value={user.preferredBranchId}
             onChange={handleChange}
           >
-            <option value="">Choose Branch</option>
-
+            <option value="">Choose</option>
             {branches.map((branch) => (
               <option key={branch.id} value={branch.id}>
                 {branch.name}
@@ -158,10 +161,11 @@ function Register() {
             ))}
           </select>
         </div>
+      </div>
 
-        <div className="mb-3">
+      <div className="row g-2 mb-4">
+        <div className="col-6">
           <label className="form-label">Password</label>
-
           <input
             type="password"
             className="form-control"
@@ -171,10 +175,8 @@ function Register() {
             required
           />
         </div>
-
-        <div className="mb-4">
-          <label className="form-label">Confirm Password</label>
-
+        <div className="col-6">
+          <label className="form-label">Confirm password</label>
           <input
             type="password"
             className="form-control"
@@ -184,31 +186,32 @@ function Register() {
             required
           />
         </div>
+      </div>
 
-        <button
-          className="btn btn-main w-100 mb-3"
-          type="submit"
-        >
-          Create Account
-        </button>
+      <button className="btn btn-main w-100 mb-3" type="submit">
+        Create Account
+      </button>
 
-        <div className="text-center my-3">
-          OR
-        </div>
+      {/* فاصل "OR" بخطوط بدل نص لوحده */}
+      <div className="d-flex align-items-center gap-2 my-3">
+        <hr className="flex-grow-1" />
+        <span className="text-muted small">OR</span>
+        <hr className="flex-grow-1" />
+      </div>
 
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={() => console.log("Google Login Failed")}
-        />
+      <GoogleLogin
+        onSuccess={(credentialResponse) => {
+          handleGoogleAuth(credentialResponse.credential);
+        }}
+        onError={() => console.log("Google Login Failed")}
+      />
 
-        <p className="text-center mt-4">
-          Already have an account?{" "}
-          <Link to="/login">
-            Login
-          </Link>
-        </p>
-      </form>
-    </div>
+      <p className="text-center mt-4 mb-0">
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
+    </form>
+  </div>
+</div>
   );
 }
 

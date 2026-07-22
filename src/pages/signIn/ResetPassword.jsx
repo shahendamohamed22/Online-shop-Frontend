@@ -37,10 +37,10 @@ function ResetPassword() {
       );
 
       console.log(user)
-      
+
       console.log("Hello");
       console.log(response.data);
-      
+
       console.log("Helloooooooooooo");
       localStorage.removeItem("email");
       localStorage.removeItem("code");
@@ -59,60 +59,62 @@ function ResetPassword() {
   }
 
   return (
-    <div className="container py-5">
-      <form
-        onSubmit={handleSubmit}
-        className="shadow rounded p-4 mx-auto"
-        style={{ maxWidth: "500px" }}
-      >
-        <h2 className="text-center mb-4">
-          Reset Password
-        </h2>
-
-        <div className="mb-3">
-          <label className="form-label">
-            New Password
-          </label>
-
-          <input
-            type="password"
-            className="form-control"
-            name="password"
-            value={user.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="form-label">
-            Confirm Password
-          </label>
-
-          <input
-            type="password"
-            className="form-control"
-            name="confirmPassword"
-            value={user.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button
-          className="btn btn-main w-100"
-          type="submit"
+    <div className="min-vh-100 d-flex align-items-center justify-content-center ">
+      <div style={{ width: "100%", maxWidth: "500px" }} className="px-3">
+        <form
+          onSubmit={handleSubmit}
+          className="shadow-lg rounded p-4 mx-auto"
+          style={{ maxWidth: "500px" }}
         >
-          Reset Password
-        </button>
+          <h2 className="text-center mb-4">
+            Reset Password
+          </h2>
 
-        <p className="text-center mt-4">
-          Back to{" "}
-          <Link to="/login">
-            Login
-          </Link>
-        </p>
-      </form>
+          <div className="mb-3">
+            <label className="form-label">
+              New Password
+            </label>
+
+            <input
+              type="password"
+              className="form-control"
+              name="password"
+              value={user.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="form-label">
+              Confirm Password
+            </label>
+
+            <input
+              type="password"
+              className="form-control"
+              name="confirmPassword"
+              value={user.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button
+            className="btn btn-main w-100"
+            type="submit"
+          >
+            Reset Password
+          </button>
+
+          <p className="text-center mt-4">
+            Back to{" "}
+            <Link to="/login">
+              Login
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
