@@ -15,7 +15,9 @@ body {
   --fs-large: 40px;
   --fs-header: 40px;
   --fs-games-header: 20px;
-  --fs-sm: 12px
+  --fs-sm: 12px;
+  --bottom-nav-height: 70px;
+
 }
 
 .bg-main {
@@ -260,6 +262,9 @@ main {
 
 
 @media screen and (min-width:992px) {
+  :root {
+    --bottom-nav-height: 0px;
+  }
   .carousel-inner{
     height: 350px;
   }
@@ -268,8 +273,10 @@ main {
   }
 
   main {
-  margin-top: 200px;
+  margin-top: 180px;
 }
+
+
 
 
 }

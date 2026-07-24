@@ -24,7 +24,6 @@ function SubCategories() {
 
   return (
     <div className="container mt-4">
-
       <div className="row g-3">
         {subCategories.map((sub) => (
           <Link key={sub.id} to={`/Products/${sub.id}`}
@@ -36,6 +35,7 @@ function SubCategories() {
                 style={{ height: "150px", objectFit: "cover" }}
               />
               <p className="p-2 mb-0 fw-bold">{sub.name}</p>
+              <p className="text-muted small pb-2">{sub.productsCount} منتج</p>
             </div>
           </Link>
         ))}

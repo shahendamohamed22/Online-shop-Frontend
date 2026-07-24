@@ -2,12 +2,20 @@ import { useState, useRef, useEffect } from "react";
 import { chat } from "../services/googleGemini";
 
 
-
+const STORAGE_KEY = "chatbot_messages";
 
 function Chatbot() {
 
     const [input, setInput] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState(() => {
+        try {
+            const saved = sessionStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : [];
+        } catch (error) {
+            console.error("Failed to load saved chat:", error);
+            return [];
+        }
+    });
     const [loading, setLoading] = useState(false);
 
     const messagesEndRef = useRef(null);
@@ -16,6 +24,14 @@ function Chatbot() {
         messagesEndRef.current?.scrollIntoView({
             behavior: "smooth",
         });
+    }, [messages]);
+
+    useEffect(() => {
+        try {
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+        } catch (error) {
+            console.error("Failed to save chat:", error);
+        }
     }, [messages]);
 
     const handleSend = async (e) => {
@@ -58,16 +74,16 @@ function Chatbot() {
         } finally {
             setLoading(false);
         };
-
-        setLoading(false);
-    };
+    }
     return (
-        <div className="container w-75 mx-auto mt-4 d-flex flex-column" style={{ height: "70vh" }}>
-            <div className="bg-main text-white rounded-3 p-3 mb-3 d-flex align-items-center gap-3">
-                <i className="fa-solid fa-robot fs-3"></i>
-                <div>
-                    <h5 className="m-0">المساعد الذكي</h5>
-                    <small>اسألني عن المنتجات والعروض والفروع</small>
+        <div className="container w-100 mx-auto d-flex flex-column" style={{ height: "calc(90vh - 140px - var(--bottom-nav-height))", maxWidth: "700px" }}>
+            <div className="bg-main text-white rounded-3 p-3 mb-3 d-flex align-items-center gap-3  justify-content-between">
+                <div className="d-flex align-items-center gap-2 gap-md-3">
+                    <i className="fa-solid fa-robot fs-3"></i>
+                    <div>
+                        <h5 className="m-0">المساعد الذكي</h5>
+                        <small>اسألني عن المنتجات والعروض والفروع</small>
+                    </div>
                 </div>
             </div>
 
@@ -77,14 +93,14 @@ function Chatbot() {
                     <div
                         key={index}
                         className={`d-flex mb-3 ${msg.role === "user"
-                                ? "justify-content-start"
-                                : "justify-content-end"
+                            ? "justify-content-start"
+                            : "justify-content-end"
                             }`}
                     >
                         <div
                             className={`p-2 rounded-3 ${msg.role === "user"
-                                    ? "bg-success fw-semibold text-white"
-                                    : "bg-light fw-semibold"
+                                ? "bg-success fw-semibold text-white"
+                                : "bg-light fw-semibold"
                                 }`}
                             style={{ maxWidth: "75%" }}
                         >

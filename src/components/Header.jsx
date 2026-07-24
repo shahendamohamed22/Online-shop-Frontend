@@ -6,7 +6,9 @@ function Header() {
     <header className="d-lg-none bg-main p-3 py-3 shadow container-fluid">
       <div className="row justify-content-between">
         <div className="col-2 d-flex gap-3 align-items-center">
-          <i className="fa-solid fa-cart-shopping fa-xl"></i>
+          <Link to="/Cart">
+            <i className="fa-solid fa-cart-shopping fa-xl text-black"></i>
+          </Link>
           <i className="fa-solid fa-magnifying-glass fa-xl"></i>
         </div>
         <div className="col-6 d-flex align-items-center justify-content-center gap-2">

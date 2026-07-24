@@ -47,6 +47,7 @@ function Shop() {
                   style={{ height: "150px", objectFit: "cover" }}
                 />
                 <p className="p-2 mb-0 fw-bold">{cat.name}</p>
+                <p className="text-muted small pb-2">{cat.productsCount} منتج</p>
               </div>
             </Link>
           ))}
