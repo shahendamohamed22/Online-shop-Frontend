@@ -1,11 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import baseUrl from "../../services/Api";
+import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
 
 function Register() {
   const navigate = useNavigate();
+  const { refetchCart } = useCart();
+  const { refetchWishlist } = useWishlist();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -19,7 +24,7 @@ function Register() {
   useEffect(() => {
     const fetchBranches = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/branches`);
+        const response = await axios.get(`${baseUrl}/api/branch`);
         setBranches(response.data);
         console.log(response.data)
       } catch (error) {
@@ -41,7 +46,7 @@ function Register() {
     e.preventDefault();
 
     if (user.password !== user.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("كلمة السر وتأكيدها مش متطابقين");
       return;
     }
 
@@ -54,11 +59,20 @@ function Register() {
       );
 
       console.log(response.data);
+      // كانت الخطوة دي ناقصة - الباك اند بيرجع token فعلي بعد التسجيل مباشرة،
+      // لكن الكود القديم كان بيتجاهله وميحطوش في localStorage، يعني المستخدم
+      // كان بيتحول للرئيسية "من غير" ما يبقى فعليًا مسجل دخول
+      localStorage.setItem("token", response.data.token);
+
+      await refetchCart();
+      await refetchWishlist();
+
       navigate("/");
 
     } catch (error) {
       console.log("STATUS:", error.response?.status);
       console.log("DATA:", error.response?.data);
+      toast.error(error.response?.data?.message ?? "حصل خطأ أثناء إنشاء الحساب");
     }
   }
 
@@ -80,12 +94,16 @@ function Register() {
       } else {
         localStorage.setItem("token", res.data.token);
 
+        await refetchCart();
+        await refetchWishlist();
+
         navigate("/");
       }
     }
     catch (error) {
       console.log(error.response?.status);
       console.log(error.response?.data);
+      toast.error(error.response?.data?.message ?? "حصل خطأ أثناء تسجيل الدخول بجوجل");
     }
   }
   return (

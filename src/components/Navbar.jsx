@@ -12,26 +12,32 @@ function Navbar() {
 
   return (
     <nav className="d-lg-none fixed-bottom border-top border-2 py-1 shadow bg-light px-2">
-      <ul className="row pt-3">
-        <li className="col-3 fs-5 text-black">
+      <ul className="d-flex justify-content-around pt-3 mb-0 list-unstyled">
+        <li className="fs-5 text-black">
+          <NavLink to="/orders" className={linkClass}>
+            <i className="fa-solid fa-receipt"></i>
+            <p>طلباتي</p>
+          </NavLink>
+        </li>
+        <li className="fs-5 text-black">
           <NavLink to="/wishlist" className={linkClass}>
             <i className="fa-regular fa-heart"></i>
             <p>المفضلة</p>
           </NavLink>
         </li>
-        <li className="col-3 fs-5 text-black">
+        <li className="fs-5 text-black">
           <NavLink to="/chatbot" className={linkClass}>
             <i className="fa-solid fa-robot"></i>
             <p>المساعد</p>
           </NavLink>
         </li>
-        <li className="col-3 fs-5 text-black">
+        <li className="fs-5 text-black">
           <NavLink to="/shop" className={linkClass}>
             <i className="fa-solid fa-shop"></i>
             <p>المتجر</p>
           </NavLink>
         </li>
-        <li className="col-3 fs-5 text-black">
+        <li className="fs-5 text-black">
           <NavLink to="/" className={linkClass} end>
             <i className="fa-regular fa-home"></i>
             <p>الرئيسية</p>

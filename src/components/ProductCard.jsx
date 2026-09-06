@@ -14,7 +14,7 @@ function ProductCard({ product }) {
   const productImage = product.images?.[0]?.url;
 
   const handleAddToCart = () => {
-    addToCart(product);
+    addToCart(product.id, 1, product.name);
   };
 
   return (

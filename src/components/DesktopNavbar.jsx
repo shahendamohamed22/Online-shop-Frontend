@@ -78,7 +78,7 @@ function DesktopNav() {
                         </Link>
 
                         <Link
-                            to="/login"
+                            to={"/login"}
                             className="text-dark"
                         >
                             <i className="fa-solid fa-user fs-4"></i>
@@ -124,6 +124,13 @@ function DesktopNav() {
                                 <NavLink to="/chatbot" className={linkClass}>
                                     <i className="fa-solid fa-robot ms-2"></i>
                                     المساعد
+                                </NavLink>
+                            </li>
+
+                            <li className="fs-5">
+                                <NavLink to="/orders" className={linkClass}>
+                                    <i className="fa-solid fa-receipt ms-2"></i>
+                                    طلباتي
                                 </NavLink>
                             </li>
 

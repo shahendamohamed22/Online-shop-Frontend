@@ -1,26 +1,35 @@
-import { products } from "../data/products";
 import { useWishlist } from "../context/WishlistContext";
 import ProductCard from "../components/ProductCard";
 
-// قبل كده الصفحة كانت بتقرا HTML جاهز اتخزن في localStorage وتحطه بـ innerHTML
-// دلوقتي بنقرا بس IDs من الـ context، ونفلتر products.js عليها، ونرندر نفس ProductCard
-// المستخدم في المتجر - يعني مفيش تكرار كود ولا تكرار تصميم
+// اتظبطت لتقرا من الباك اند الحقيقي (wishlistItems من WishlistContext) بدل البيانات المحلية.
+// شكل عنصر المفضلة الراجع من /api/wishlist مختلف عن شكل المنتج العادي
+// (productId/productName/productImage مفردة بدل id/name/images array)،
+// فبنعمل تحويل بسيط (map) هنا عشان نقدر نستخدم نفس ProductCard من غير ما نعدلها.
 
 function Wishlist() {
-  const { wishlistIds } = useWishlist();
-  const wishlistProducts = products.filter((p) => wishlistIds.includes(p.id));
+  const { wishlistItems, loading } = useWishlist();
+
+  const productsForCard = wishlistItems.map((item) => ({
+    id: item.productId,
+    name: item.productName,
+    newPrice: item.newPrice,
+    oldPrice: item.oldPrice,
+    hasDiscount: item.hasDiscount,
+    discountPercentage: item.discountPercentage,
+    images: [{ url: item.productImage }],
+  }));
 
   return (
     <main className="container">
       <h2 className="badge bg-main mt-2 fs-3">المفضلة</h2>
       <div className="mt-3">
         <div className="row g-3">
-          {wishlistProducts.length === 0 ? (
-            <p className="mt-3"></p>
+          {loading ? (
+            <p>جاري التحميل...</p>
+          ) : productsForCard.length === 0 ? (
+            <p className="mt-3">مفيش منتجات في المفضلة لسه.</p>
           ) : (
-            wishlistProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
+            productsForCard.map((product) => <ProductCard key={product.id} product={product} />)
           )}
         </div>
       </div>

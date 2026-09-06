@@ -1,44 +1,74 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
+import axiosInstance from "../services/axiosInstance";
 
-// بنعمل Context عشان أي component في التطبيق (Navbar, Shop, Wishlist...)
-// يقدر يوصل لحالة المفضلة من غير ما نمرر props يدوي من فوق لتحت (prop drilling)
+// اتغيّرت بالكامل من نسخة الـ localStorage للنسخة اللي بتتكلم مع الباك اند الحقيقي
+// (GET/POST/DELETE /api/wishlist)، عشان المفضلة تبقى محفوظة على حساب المستخدم نفسه
+// مش على المتصفح بس، وتفضل موجودة حتى لو غيّر جهاز.
+// الـ endpoints دي "Customer Only" يعني لازم تسجيل دخول (فيه توكن في localStorage).
 
 const WishlistContext = createContext();
 
-const STORAGE_KEY = "wishlistIds";
-
 export function WishlistProvider({ children }) {
-  // هنا الفرق الأساسي عن main.js الأصلي:
-  // بدل ما نخزن الـ HTML بتاع الكارت كله في localStorage (card.outerHTML)،
-  // بنخزن بس مصفوفة IDs. المصفوفة هي الـ "source of truth" الوحيد،
-  // وأي كارت بيترندر live من products.js + الـ IDs دي
+  const [wishlistItems, setWishlistItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const [wishlistIds, setWishlistIds] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const fetchWishlist = useCallback(async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setWishlistItems([]);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get("/api/wishlist");
+      setWishlistItems(res.data ?? []);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  // كل ما الـ state يتغير، نحدث localStorage تلقائي (useEffect بيراقب wishlistIds)
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(wishlistIds));
-  }, [wishlistIds]);
+    fetchWishlist();
+  }, [fetchWishlist]);
 
-  const isInWishlist = (id) => wishlistIds.includes(id);
+  const isInWishlist = (productId) =>
+    wishlistItems.some((item) => item.productId === productId);
 
-  const toggleWishlist = (id) => {
-    setWishlistIds((prev) =>
-      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
-    );
+  const toggleWishlist = async (productId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.info("سجّلي دخول الأول عشان تضيفي للمفضلة");
+      return;
+    }
+
+    const alreadyIn = isInWishlist(productId);
+    try {
+      if (alreadyIn) {
+        await axiosInstance.delete(`/api/wishlist/${productId}`);
+        setWishlistItems((prev) => prev.filter((item) => item.productId !== productId));
+      } else {
+        await axiosInstance.post(`/api/wishlist/${productId}`);
+        // بعد الإضافة، بنعيد جلب القائمة عشان ناخد بيانات المنتج كاملة من الباك اند
+        fetchWishlist();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("حصل خطأ، حاولي تاني");
+    }
   };
 
   return (
-    <WishlistContext.Provider value={{ wishlistIds, isInWishlist, toggleWishlist }}>
+    <WishlistContext.Provider
+      value={{ wishlistItems, isInWishlist, toggleWishlist, loading, refetchWishlist: fetchWishlist }}
+    >
       {children}
     </WishlistContext.Provider>
   );
 }
 
-// custom hook بسيط عشان مانكتبش useContext(WishlistContext) في كل صفحة
 export function useWishlist() {
   return useContext(WishlistContext);
 }

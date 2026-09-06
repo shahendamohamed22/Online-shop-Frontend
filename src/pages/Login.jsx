@@ -51,7 +51,6 @@ function Login() {
                 idToken: token,
             });
 
-            // لو نجح على طول (يعني مستخدم قديم) - سجّليه دخول عادي هنا
             console.log(res.data);
             if (res.data.requiresAdditionalInfo) {
                 localStorage.setItem("googleEmail", res.data.email);
@@ -107,7 +106,7 @@ function Login() {
                     <GoogleLogin
                         onSuccess={(credentialResponse) => {
                             handleGoogleAuth(credentialResponse.credential);
-                            console.log("success Login Failed") // ده الـ idToken
+                            console.log("success Login Failed")
                         }}
                         onError={() => console.log("Google Login Failed")}
                     />

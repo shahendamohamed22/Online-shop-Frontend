@@ -11,12 +11,14 @@ import googleClientId from "./services/googleCongif.js";
 
 import App from "./App.jsx";
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={googleClientId}>
       <BrowserRouter>
         <App />
+        <ToastContainer position="bottom-left" rtl={true} autoClose={2000} />
       </BrowserRouter>
     </GoogleOAuthProvider>
   </StrictMode>
