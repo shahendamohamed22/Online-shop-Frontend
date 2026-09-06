@@ -35,7 +35,7 @@ function Orders() {
       <h2 className="mb-4">طلباتي</h2>
 
       {orders.length === 0 ? (
-        <p>لسه معملتيش أي طلب.</p>
+        <p>لا يوجد طلبات.</p>
       ) : (
         orders.map((order) => (
           <Link

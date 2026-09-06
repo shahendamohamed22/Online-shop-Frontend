@@ -77,8 +77,8 @@ function DesktopNav() {
 
                         </Link>
 
-                        <Link
-                            to={"/login"}
+      
+                       <Link to={localStorage.getItem("token") ? "/profile" : "/Login"}
                             className="text-dark"
                         >
                             <i className="fa-solid fa-user fs-4"></i>
@@ -126,14 +126,6 @@ function DesktopNav() {
                                     المساعد
                                 </NavLink>
                             </li>
-
-                            <li className="fs-5">
-                                <NavLink to="/orders" className={linkClass}>
-                                    <i className="fa-solid fa-receipt ms-2"></i>
-                                    طلباتي
-                                </NavLink>
-                            </li>
-
                         </ul>
 
                     </div>

@@ -6,27 +6,28 @@ import baseUrl from "../../services/Api";
 function CompleteGoogleProfile() {
     const navigate = useNavigate();
 
-    const [branches, setBranches] = useState([]);
 
     const [user, setUser] = useState({
         phoneNumber: "",
         preferredBranchId: "",
     });
 
+    const [branches, setBranches] = useState([]);
+
     useEffect(() => {
-        getBranches();
+        const fetchBranches = async () => {
+            try {
+                const response = await axios.get(`${baseUrl}/api/branch`);
+                setBranches(response.data);
+                console.log(response.data)
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchBranches();
     }, []);
-
-    async function getBranches() {
-        try {
-            const response = await axios.get(`${baseUrl}/api/branches`);
-
-            setBranches(response.data);
-        } catch (error) {
-            console.log(error.response?.data);
-        }
-    }
-
+    
     const idToken = localStorage.getItem("googleIdToken");
     const email = localStorage.getItem("googleEmail");
     const firstName = localStorage.getItem("googleFirstName");

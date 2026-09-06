@@ -40,7 +40,7 @@ export function WishlistProvider({ children }) {
   const toggleWishlist = async (productId) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.info("سجّلي دخول الأول عشان تضيفي للمفضلة");
+      toast.info("سجّل دخول الأول ");
       return;
     }
 
@@ -56,7 +56,7 @@ export function WishlistProvider({ children }) {
       }
     } catch (error) {
       console.log(error);
-      toast.error("حصل خطأ، حاولي تاني");
+      toast.error("حدث خطأ، حاول تاني");
     }
   };
 

@@ -27,7 +27,7 @@ function Wishlist() {
           {loading ? (
             <p>جاري التحميل...</p>
           ) : productsForCard.length === 0 ? (
-            <p className="mt-3">مفيش منتجات في المفضلة لسه.</p>
+            <p className="mt-3">لا يوجد منتجات في المفضلة.</p>
           ) : (
             productsForCard.map((product) => <ProductCard key={product.id} product={product} />)
           )}

@@ -40,12 +40,12 @@ function OfferCheckout() {
   const handlePlaceOrder = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.info("سجّلي دخول الأول عشان تكملي الطلب");
+      toast.info("سجّل دخول الأول ");
       navigate("/Login");
       return;
     }
     if (!branchId) {
-      toast.info("اختاري الفرع الأول");
+      toast.info("اختار الفرع الأول");
       return;
     }
 
@@ -94,13 +94,13 @@ function OfferCheckout() {
       ))}
 
       <div className="mt-4">
-        <label className="form-label">اختاري الفرع</label>
+        <label className="form-label">اختار الفرع</label>
         <select
           className="form-select mb-3"
           value={branchId}
           onChange={(e) => setBranchId(e.target.value)}
         >
-          <option value="">اختاري فرع الاستلام/التوصيل</option>
+          <option value="">اختار فرع الاستلام/التوصيل</option>
           {branches.map((branch) => (
             <option key={branch.id} value={branch.id}>
               {branch.name}

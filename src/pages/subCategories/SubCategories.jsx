@@ -24,7 +24,7 @@ function SubCategories() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-3">{category?.name}</h2>
+      <h2 className="badge bg-main fs-3 mb-3">{category?.name}</h2>
       <div className="row g-3">
         {subCategories.map((sub) => {
           // لو القسم ده لسه جواه أقسام فرعية تانية، نكمل ندخل مستوى تاني من الأقسام

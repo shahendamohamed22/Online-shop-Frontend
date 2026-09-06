@@ -41,7 +41,7 @@ function Products() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-3">{categoryName}</h2>
+      <h2 className="mb-3 badge bg-main fs-3">{categoryName}</h2>
       <div className="row g-3">
         {products.length === 0 ? (
           <p>لا توجد منتجات في هذا القسم حاليًا.</p>

@@ -12,13 +12,7 @@ function Navbar() {
 
   return (
     <nav className="d-lg-none fixed-bottom border-top border-2 py-1 shadow bg-light px-2">
-      <ul className="d-flex justify-content-around pt-3 mb-0 list-unstyled">
-        <li className="fs-5 text-black">
-          <NavLink to="/orders" className={linkClass}>
-            <i className="fa-solid fa-receipt"></i>
-            <p>طلباتي</p>
-          </NavLink>
-        </li>
+      <ul className="d-flex justify-content-around pt-3 mb-0 list-unstyled">      
         <li className="fs-5 text-black">
           <NavLink to="/wishlist" className={linkClass}>
             <i className="fa-regular fa-heart"></i>

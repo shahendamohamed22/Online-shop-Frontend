@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
+import OrdersPreview from "./orders/OrdersPreview";
 
 // صفحة جديدة - بتستخدم:
 // GET /api/customer/profile, PUT /api/customer/profile, PUT /api/customer/profile/change-password
@@ -12,6 +14,8 @@ function Profile() {
 
   const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "" });
   const [changingPassword, setChangingPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,11 +78,17 @@ function Profile() {
   };
 
   if (loading) return <p className="container mt-4">جاري التحميل...</p>;
-  if (!profile) return <p className="container mt-4">محتاجة تسجّلي دخول الأول.</p>;
+  if (!profile) return <p className="container mt-4">محتاج تسجّل دخول الأول.</p>;
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    toast.success("تم تسجيل الخروج بنجاح");
+    navigate("/");
+  };
 
   return (
-    <div className="container mt-4" style={{ maxWidth: "500px" }}>
-      <h2 className="mb-4">بياناتي</h2>
+    <div className="container mt-4" style={{ maxWidth: "1000px" }}>
+      <h2 className="badge bg-main fs-4 mb-4">بياناتي</h2>
 
       <form onSubmit={handleSaveProfile} className="mb-5">
         <div className="row g-2 mb-3">
@@ -134,12 +144,12 @@ function Profile() {
           </select>
         </div>
 
-        <button className="btn btn-main w-100" type="submit" disabled={saving}>
+        <button className="btn btn-main w-50" type="submit" disabled={saving}>
           {saving ? "جاري الحفظ..." : "حفظ التعديلات"}
         </button>
       </form>
 
-      <h3 className="fs-5 mb-3">تغيير كلمة السر</h3>
+      <h3 className="badge bg-main fs-4 mb-3">تغيير كلمة السر</h3>
       <form onSubmit={handleChangePassword}>
         <div className="mb-3">
           <label className="form-label">كلمة السر الحالية</label>
@@ -161,10 +171,16 @@ function Profile() {
             required
           />
         </div>
-        <button className="btn btn-outline-secondary w-100" type="submit" disabled={changingPassword}>
+        <button className="btn btn-outline-secondary w-50" type="submit" disabled={changingPassword}>
           {changingPassword ? "جاري التغيير..." : "تغيير كلمة السر"}
         </button>
       </form>
+
+      <OrdersPreview />
+
+      <button className="btn btn-danger mt-2 w-50" onClick={handleLogout} >
+        تسجيل الخروج
+      </button>
     </div>
   );
 }

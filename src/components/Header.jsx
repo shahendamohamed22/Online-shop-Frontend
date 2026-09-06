@@ -18,7 +18,7 @@ function Header() {
           </Link>
         </div>
         <div className="col-2 d-flex align-items-center justify-content-end">
-          <Link to={"/Login"}>
+          <Link to={localStorage.getItem("token") ? "/profile" : "/Login"}>
             <i className="fa-solid fa-user fa-xl text-black"></i>
           </Link>
         </div>
