@@ -4,10 +4,6 @@ import { toast } from "react-toastify";
 import { useCart } from "../context/CartContext";
 import axiosInstance from "../services/axiosInstance";
 
-// اتظبطت بالكامل على شكل رد /api/cart الحقيقي (items بأسامي productId/productName/
-// unitPrice/finalPrice/quantity/subtotal/productImage) بدل الشكل المحلي القديم.
-// وضفنا زرار "إتمام الطلب" اللي بيعمل POST /api/order فعليًا بمنتجات السلة.
-
 function Cart() {
   const { cartItems, cartTotal, removeFromCart, updateQuantity, clearCart, loading } = useCart();
   const navigate = useNavigate();
@@ -73,6 +69,19 @@ function Cart() {
   return (
     <div className="container mt-4">
       <h2 className="badge bg-main mb-3 fs-3">عربة التسوق</h2>
+
+      {cartItems.length > 0 && (
+        <div className="d-flex justify-content-end mb-3">
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={clearCart}
+          >
+            <i className="fa-solid fa-trash me-2"></i>
+            مسح السلة
+          </button>
+        </div>
+      )}
 
       {cartItems.map((item) => (
         <div key={item.productId} className="d-flex align-items-center gap-3 border-bottom pb-3 mb-3">

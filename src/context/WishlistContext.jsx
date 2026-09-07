@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+import { createContext, useContext, useState, useEffect, useCallback} from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../services/axiosInstance";
 import { useAuth } from "./AuthContext";
@@ -20,8 +14,11 @@ export function WishlistProvider({ children }) {
     loading: authLoading,
   } = useAuth();
 
+  // =========================
+  // Fetch Wishlist
+  // =========================
   const fetchWishlist = useCallback(async () => {
-    // لسه بنحدد حالة الـ login
+    // استنى لحد ما AuthContext يحدد حالة المستخدم
     if (authLoading) return;
 
     // المستخدم مش مسجل دخول
@@ -43,16 +40,25 @@ export function WishlistProvider({ children }) {
     }
   }, [isAuthenticated, authLoading]);
 
+  // أول ما حالة الـ Auth تخلص، هات الـ Wishlist
   useEffect(() => {
     fetchWishlist();
   }, [fetchWishlist]);
 
-  const isInWishlist = (productId) =>
-    wishlistItems.some(
+  // =========================
+  // Check if product is in wishlist
+  // =========================
+  const isInWishlist = (productId) => {
+    return wishlistItems.some(
       (item) => item.productId === productId
     );
+  };
 
+  // =========================
+  // Add / Remove Wishlist
+  // =========================
   const toggleWishlist = async (productId) => {
+    // لازم يكون مسجل دخول
     if (!isAuthenticated) {
       toast.info("سجّل دخول الأول");
       return;
@@ -60,26 +66,64 @@ export function WishlistProvider({ children }) {
 
     const alreadyIn = isInWishlist(productId);
 
-    try {
-      if (alreadyIn) {
+    // =========================
+    // Remove from Wishlist
+    // =========================
+    if (alreadyIn) {
+      // غير شكل القلب فورًا
+      setWishlistItems((prev) =>
+        prev.filter(
+          (item) => item.productId !== productId
+        )
+      );
+
+      try {
         await axiosInstance.delete(
           `/api/wishlist/${productId}`
         );
 
-        setWishlistItems((prev) =>
-          prev.filter(
-            (item) => item.productId !== productId
-          )
+        toast.success(
+          "تمت إزالة المنتج من المفضلة"
         );
-      } else {
-        await axiosInstance.post(
-          `/api/wishlist/${productId}`
-        );
+      } catch (error) {
+        console.log(error);
 
+        // لو الـ API فشل، رجّع الـ Wishlist الحقيقية
         await fetchWishlist();
+
+        toast.error("حدث خطأ، حاول تاني");
       }
+
+      return;
+    }
+
+    // =========================
+    // Add to Wishlist
+    // =========================
+
+    // غير شكل القلب فورًا
+    setWishlistItems((prev) => [
+      ...prev,
+      { productId },
+    ]);
+
+    try {
+      await axiosInstance.post(
+        `/api/wishlist/${productId}`
+      );
+
+      toast.success(
+        "تمت إضافة المنتج إلى المفضلة"
+      );
     } catch (error) {
       console.log(error);
+
+      // لو الـ API فشل، رجّع القلب لحالته القديمة
+      setWishlistItems((prev) =>
+        prev.filter(
+          (item) => item.productId !== productId
+        )
+      );
 
       toast.error("حدث خطأ، حاول تاني");
     }
@@ -92,7 +136,7 @@ export function WishlistProvider({ children }) {
         isInWishlist,
         toggleWishlist,
         loading,
-        refetchWishlist: () => fetchWishlist(),
+        refetchWishlist: fetchWishlist,
       }}
     >
       {children}

@@ -14,6 +14,7 @@ import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import Orders from "./pages/orders/Orders";
 import OrderDetails from "./pages/orders/OrderDetails";
+import Reviews from "./pages/reviews/Reviews";
 import Login from "./pages/Login";
 import Register from "./pages/signIn/Register";
 import ForgetPassword from "./pages/signIn/ForgetPassword";
@@ -38,6 +39,7 @@ function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="orders" element={<Orders />} />
               <Route path="orders/:id" element={<OrderDetails />} />
+              <Route path="reviews" element={<Reviews />} />
               <Route path="/SubCategories/:categoryId" element={<SubCategories />} />
               <Route path="/Products/:categoryId" element={<Products />} />
               <Route path="offer/:offerId/checkout" element={<OfferCheckout />} />

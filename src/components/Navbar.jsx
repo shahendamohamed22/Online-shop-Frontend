@@ -7,11 +7,6 @@ function Navbar() {
 
   const location = useLocation();
 
-  const isShopActive =
-    location.pathname === "/shop" ||
-    location.pathname.startsWith("/SubCategories/") ||
-    location.pathname.startsWith("/Products/");
-
   return (
     <nav className="d-lg-none fixed-bottom border-top border-2 py-1 shadow bg-light px-2">
       <ul className="d-flex justify-content-around pt-3 mb-0 list-unstyled">

@@ -1,17 +1,26 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/imgs/logo.png";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 
 function Header() {
   const { isAuthenticated } = useAuth();
-
+const { cartCount } = useCart();
   return (
     <header className="d-lg-none bg-main p-3 py-3 shadow container-fluid">
       <div className="row justify-content-between">
         <div className="col-2 d-flex gap-3 align-items-center">
-          <Link to="/Cart">
-            <i className="fa-solid fa-cart-shopping fa-xl text-black"></i>
+          <Link to="/Cart" className="text-dark position-relative">
+            <i className="fa-solid fa-cart-shopping fa-xl"></i>
+            {cartCount > 0 && (
+              <span
+                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style={{ fontSize: "10px" }}
+              >
+                {cartCount}
+              </span>
+            )}
           </Link>
           <i className="fa-solid fa-magnifying-glass fa-xl"></i>
         </div>

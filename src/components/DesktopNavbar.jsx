@@ -1,6 +1,7 @@
 import { NavLink, Link, useLocation } from "react-router-dom";
 import logo from "../assets/imgs/logo.png";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 function DesktopNav() {
     const linkClass = ({ isActive }) =>
@@ -10,6 +11,8 @@ function DesktopNav() {
     const { isAuthenticated } = useAuth();
 
     const location = useLocation();
+
+    const { cartCount } = useCart();
 
     return (
         <header className="d-none d-lg-block bg-main shadow-sm fixed-top">
@@ -73,12 +76,17 @@ function DesktopNav() {
                             <i className="fa-regular fa-heart fs-4"></i>
                         </Link>
 
-                        <Link
-                            to="/cart"
-                            className="text-dark position-relative"
-                        >
+                        <Link to="/cart" className="text-dark position-relative">
                             <i className="fa-solid fa-cart-shopping fs-4"></i>
 
+                            {cartCount > 0 && (
+                                <span
+                                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                    style={{ fontSize: "10px" }}
+                                >
+                                    {cartCount}
+                                </span>
+                            )}
                         </Link>
 
 

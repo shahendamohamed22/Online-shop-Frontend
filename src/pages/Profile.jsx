@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
 import OrdersPreview from "./orders/OrdersPreview";
+import ReviewsPreview from "./reviews/ReviewsPreview";
 import { validatePhone, validateRequired, validatePassword } from "../services/validation";
 import { useAuth } from "../context/AuthContext";
 
@@ -310,6 +311,8 @@ function Profile() {
       </form>
 
       <OrdersPreview />
+
+      <ReviewsPreview />
 
       <button className="btn btn-danger mt-2 w-50" onClick={handleLogout} >
         تسجيل الخروج

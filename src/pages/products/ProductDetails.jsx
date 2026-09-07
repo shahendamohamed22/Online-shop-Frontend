@@ -5,11 +5,6 @@ import axiosInstance from "../../services/axiosInstance";
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
 
-// اتحولت بالكامل من بيانات محلية (data/products.js) لبيانات حقيقية من الـ API:
-// - تفاصيل المنتج: GET /api/product/:id (عام، مش محتاج تسجيل دخول)
-// - التقييمات: GET /api/review/product/:id (عام)
-// - إضافة تقييم: POST /api/review (محتاج تسجيل دخول)
-
 function ProductDetails() {
   const { id } = useParams();
   const { isInWishlist, toggleWishlist } = useWishlist();
@@ -20,9 +15,10 @@ function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  const [newRating, setNewRating] = useState(5);
+  const [newRating, setNewRating] = useState(0);
   const [newComment, setNewComment] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
+
 
   const fetchReviews = async () => {
     try {
@@ -50,6 +46,17 @@ function ProductDetails() {
     fetchProduct();
     fetchReviews();
   }, [id]);
+
+  const handleRating = (e, star) => {
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - left;
+
+    const rating = x < width / 2
+      ? star - 0.5
+      : star;
+
+    setNewRating(rating);
+  };
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
@@ -252,20 +259,64 @@ function ProductDetails() {
 
           <form onSubmit={handleSubmitReview}>
 
-            <select
-              className="form-select mb-3"
-              value={newRating}
-              onChange={(e) =>
-                setNewRating(e.target.value)
-              }
-              style={{ maxWidth: "180px" }}
-            >
-              <option value="5">5 - ممتاز</option>
-              <option value="4">4 - جيد جدًا</option>
-              <option value="3">3 - جيد</option>
-              <option value="2">2 - مقبول</option>
-              <option value="1">1 - ضعيف</option>
-            </select>
+            <div className="mb-3">
+              <div className="d-flex justify-content-end align-items-center gap-1"
+                style={{ direction: "ltr" }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    onClick={(e) => handleRating(e, star)}
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      width: "35px",
+                      height: "35px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {/* النجمة الفاضية */}
+                    <i
+                      className="fa-regular fa-star"
+                      style={{
+                        position: "absolute",
+                        fontSize: "30px",
+                        color: "#ffc107",
+                      }}
+                    ></i>
+
+                    {/* النجمة الممتلئة */}
+                    {newRating >= star && (
+                      <i
+                        className="fa-solid fa-star"
+                        style={{
+                          position: "absolute",
+                          fontSize: "30px",
+                          color: "#ffc107",
+                        }}
+                      ></i>
+                    )}
+
+                    {/* نصف نجمة */}
+                    {newRating === star - 0.5 && (
+                      <i
+                        className="fa-solid fa-star-half-stroke"
+                        style={{
+                          position: "absolute",
+                          fontSize: "30px",
+                          color: "#ffc107",
+                        }}
+                      ></i>
+                    )}
+                  </span>
+                ))}
+              </div>
+
+              <div className="text-muted small mt-2">
+                {newRating > 0
+                  ? `تقييمك: ${newRating}`
+                  : "اختاري تقييمك"}
+              </div>
+            </div>
 
             <textarea
               className="form-control mb-3"
