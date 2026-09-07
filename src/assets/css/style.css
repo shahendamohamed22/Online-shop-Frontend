@@ -84,8 +84,9 @@ nav {
   right: 0;
   left: 0;
 }
+
 .active-nav {
-    color: var(--main-color, green) !important;
+  color: var(--main-color, green) !important;
 }
 
 main {
@@ -201,24 +202,25 @@ main {
   display: none;
 }
 
-.heart{
+.heart {
   cursor: pointer;
 }
+
 /* ######################################################### */
 
 
 .main-image-box {
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #eee;
-    background-color: #fafafa;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  background-color: #fafafa;
 }
 
 
 /* تأثير خفيف عند تمرير الماوس فوق الصورة الأساسية */
 .main-image-box img:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 
@@ -231,33 +233,33 @@ main {
 /* أزرار الكمية والشراء */
 
 .quantity-selector {
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    overflow: hidden;
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .qty-btn {
-    background-color: #f5f5f5;
-    border: none;
-    width: 40px;
-    height: 45px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background 0.2s;
+  background-color: #f5f5f5;
+  border: none;
+  width: 40px;
+  height: 45px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .qty-btn:hover {
-    background-color: #e5e5e5;
+  background-color: #e5e5e5;
 }
 
 .quantity-selector input {
-    width: 50px;
-    border: none;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: bold;
-    outline: none;
+  width: 50px;
+  border: none;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  outline: none;
 }
 
 
@@ -265,18 +267,23 @@ main {
   :root {
     --bottom-nav-height: 0px;
   }
-  .carousel-inner{
+
+  .carousel-inner {
     height: 350px;
   }
-  .w-lg-50{
-    width: 50% !important ;
+
+  .w-lg-50 {
+    width: 50% !important;
   }
 
   main {
-  margin-top: 180px;
+    margin-top: 180px;
+  }
+
 }
 
-
-
-
+@media (max-width: 768px) {
+  main {
+    padding-bottom: 80px;
+  }
 }

@@ -3,11 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosInstance from "../services/axiosInstance";
 
-// صفحة إتمام طلب خاصة بالباقات (Bundle offers) بس - مختلفة عن Cart.jsx العادية
-// لأن الكميات هنا ثابتة (محددة في العرض نفسه) ومش قابلة للتعديل من اليوزر،
-// والأهم إننا لازم نبعت offerId مع الطلب (مش null) عشان الباك اند يعرف يفرق
-// بين طلب عادي وطلب باقة
-
 function OfferCheckout() {
   const { offerId } = useParams();
   const navigate = useNavigate();

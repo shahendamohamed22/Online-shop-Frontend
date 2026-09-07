@@ -14,14 +14,20 @@ import slider3 from "../assets/imgs/slider-3.avif";
 // - قسم "العروض": GET /api/offer/active (عام)
 
 function Home() {
-  const [discountedProducts, setDiscountedProducts] = useState([]);
   const [offers, setOffers] = useState([]);
+  const [discountedProducts, setDiscountedProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
 
   useEffect(() => {
     const fetchDiscounted = async () => {
       try {
         const res = await axiosInstance.get("/api/product");
-        setDiscountedProducts((res.data ?? []).filter((p) => p.hasDiscount));
+        const products = res.data ?? [];
+
+        setAllProducts(products);
+        setDiscountedProducts(products.filter((p) => p.hasDiscount));
+
       } catch (error) {
         console.log(error);
       }
@@ -99,6 +105,21 @@ function Home() {
             <p className="text-muted">لا توجد خصومات حاليًا.</p>
           ) : (
             discountedProducts.map((product) => <ProductCard key={product.id} product={product} />)
+          )}
+        </div>
+      </section>
+      <section className="container mt-5 mb-5">
+        <header className="pe-2">
+          <h2 className="section-title fw-bold">المنتجات</h2>
+        </header>
+
+        <div className="row g-3 mt-3">
+          {allProducts.length === 0 ? (
+            <p className="text-muted">لا توجد منتجات حاليًا.</p>
+          ) : (
+            allProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
           )}
         </div>
       </section>
