@@ -1,6 +1,13 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../services/axiosInstance";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
@@ -10,48 +17,58 @@ export function CartProvider({ children }) {
   const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const fetchCart = useCallback(async (showLoading = true) => {
-    const token = localStorage.getItem("token");
+  const {
+    isAuthenticated,
+    loading: authLoading,
+  } = useAuth();
 
-    if (!token) {
-      setCartItems([]);
-      setCartTotal(0);
-      setCartCount(0);
-      setLoading(false);
-      return;
-    }
+  const fetchCart = useCallback(
+    async (showLoading = true) => {
+      // لسه AuthContext بيحدد حالة المستخدم
+      if (authLoading) return;
 
-    if (showLoading) {
-      setLoading(true);
-    }
-
-    try {
-      const res = await axiosInstance.get("/api/cart");
-
-      setCartItems(res.data?.items ?? []);
-      setCartTotal(res.data?.totalPrice ?? 0);
-      setCartCount(res.data?.totalItems ?? 0);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      if (showLoading) {
+      // المستخدم مش مسجل دخول
+      if (!isAuthenticated) {
+        setCartItems([]);
+        setCartTotal(0);
+        setCartCount(0);
         setLoading(false);
+        return;
       }
-    }
-  }, []);
+
+      if (showLoading) {
+        setLoading(true);
+      }
+
+      try {
+        const res = await axiosInstance.get("/api/cart");
+
+        setCartItems(res.data?.items ?? []);
+        setCartTotal(res.data?.totalPrice ?? 0);
+        setCartCount(res.data?.totalItems ?? 0);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        if (showLoading) {
+          setLoading(false);
+        }
+      }
+    },
+    [isAuthenticated, authLoading]
+  );
 
   useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
+    if (authLoading) return;
+
+    fetchCart(true);
+  }, [authLoading, fetchCart]);
 
   const addToCart = async (
     productId,
     quantity = 1,
     productName = ""
   ) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
+    if (!isAuthenticated) {
       toast.info("سجّل دخول الأول عشان تضيف للسلة");
       return;
     }
@@ -62,13 +79,13 @@ export function CartProvider({ children }) {
         quantity,
       });
 
+      await fetchCart(false);
+
       toast.success(
         productName
-          ? `تم إضافة "${productName}" إلى السلة"`
+          ? `تم إضافة "${productName}" إلى السلة`
           : "تم الإضافة إلى السلة"
       );
-
-      await fetchCart(false);
     } catch (error) {
       console.log(error);
       toast.error("حدث خطأ أثناء الإضافة للسلة");
@@ -76,43 +93,66 @@ export function CartProvider({ children }) {
   };
 
   const removeFromCart = async (productId) => {
+    if (!isAuthenticated) return;
+
     try {
       await axiosInstance.delete(`/api/cart/${productId}`);
-      await fetchCart(false);
 
+      await fetchCart(false);
     } catch (error) {
       console.log(error);
       toast.error("حدث خطأ أثناء الحذف من السلة");
     }
   };
 
- const updateQuantity = async (productId, quantity) => {
-  if (quantity < 1) return;
-  setCartItems((prev) =>
-    prev.map((item) =>
-      item.productId === productId
-        ? { ...item, quantity }
-        : item
-    )
-  );
-  try {
-    await axiosInstance.put(`/api/cart/${productId}`, {
-      quantity,
-    });
-    await fetchCart(false);
-  } catch (error) {
-    console.log(error);
-    await fetchCart(false);
-    toast.error("حدث خطأ أثناء تحديث الكمية");
-  }
-};
+  const updateQuantity = async (productId, quantity) => {
+    if (!isAuthenticated) return;
 
-  const clearCart = async () => {
+    if (quantity < 1) return;
+
+    // تغيير الرقم فورًا في الشاشة
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.productId === productId
+          ? {
+              ...item,
+              quantity,
+            }
+          : item
+      )
+    );
+
     try {
-      await axiosInstance.delete("/api/cart");
+      await axiosInstance.put(
+        `/api/cart/${productId}`,
+        {
+          quantity,
+        }
+      );
+
+      // نجيب الـ total والـ count الحقيقيين
+      // بدون إظهار loading
       await fetchCart(false);
     } catch (error) {
       console.log(error);
+
+      // لو الـ API فشل، نرجع الحقيقة
+      await fetchCart(false);
+
+      toast.error("حدث خطأ أثناء تحديث الكمية");
+    }
+  };
+
+  const clearCart = async () => {
+    if (!isAuthenticated) return;
+
+    try {
+      await axiosInstance.delete("/api/cart");
+
+      await fetchCart(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("حدث خطأ أثناء تفريغ السلة");
     }
   };
 
@@ -127,7 +167,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         updateQuantity,
         clearCart,
-        refetchCart: fetchCart,
+        refetchCart: () => fetchCart(false),
       }}
     >
       {children}
