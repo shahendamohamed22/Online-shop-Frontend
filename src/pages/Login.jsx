@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import baseUrl from "../services/Api";
-import ResetPassword from "./signIn/ResetPassword";
+import { validateEmail, validateRequired } from "../services/validation";
+import { toast } from "react-toastify";
 
 
 function Login() {
@@ -12,18 +13,41 @@ function Login() {
         email: "",
         password: "",
     });
+    const [errors, setErrors] = useState({});
 
     function handleChange(e) {
         setUser({
             ...user,
             [e.target.name]: e.target.value,
         });
+
+        if (errors[e.target.name]) {
+            setErrors((prev) => {
+                const updated = { ...prev };
+                delete updated[e.target.name];
+                return updated;
+            });
+        }
+    }
+
+    function validate() {
+        const newErrors = {
+            email: validateEmail(user.email),
+            password: validateRequired(user.password, "كلمة السر"),
+        };
+
+        Object.keys(newErrors).forEach((key) => {
+            if (!newErrors[key]) delete newErrors[key];
+        });
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        console.log(user);
+        if (!validate()) return;
 
         try {
             const response = await axios.post(
@@ -31,17 +55,16 @@ function Login() {
                 user
             );
             console.log("Login Success");
-            console.log(response.data);
 
             localStorage.setItem("token", response.data.token);
-            console.log("Token Saved");
-
-
+            toast.success("تم تسجيل الدخول بنجاح");
             navigate("/");
 
         } catch (error) {
             console.log("STATUS:", error.response?.status);
             console.log("DATA:", error.response?.data);
+            toast.error(error.response?.data?.message ?? "الإيميل أو كلمة السر غير صحيحة");
+
         }
     }
 
@@ -81,12 +104,26 @@ function Login() {
 
                     <div className="mb-3">
                         <label>Email</label>
-                        <input type="email" className="form-control" name="email" value={user.email} onChange={handleChange} />
+                        <input
+                            type="email"
+                            className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                            name="email"
+                            value={user.email}
+                            onChange={handleChange}
+                        />
+                        {errors.email && <div className="text-danger small mt-1">{errors.email}</div>}
                     </div>
 
                     <div className="mb-3">
                         <label>Password</label>
-                        <input type="password" className="form-control" name="password" value={user.password} onChange={handleChange} />
+                        <input
+                            type="password"
+                            className={`form-control ${errors.password ? "is-invalid" : ""}`}
+                            name="password"
+                            value={user.password}
+                            onChange={handleChange}
+                        />
+                        {errors.password && <div className="text-danger small mt-1">{errors.password}</div>}
                     </div>
 
                     <div className="text-end mb-3">

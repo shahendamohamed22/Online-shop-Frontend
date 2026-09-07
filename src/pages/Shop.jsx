@@ -27,13 +27,13 @@ function Shop() {
           <Link
             key={cat.id}
             to={`/SubCategories/${cat.id}`}
-            className="col-6 col-md-4 col-lg-3 text-decoration-none text-black"
+            className="col-12 col-md-6 text-decoration-none text-black"
           >
             <div className="border rounded-4 overflow-hidden shadow text-center">
               <img
                 src={cat.imageUrl}
                 alt={cat.name}
-                style={{ height: "150px", objectFit: "cover", width: "100%" }}
+                style={{ height: "200px", objectFit: "cover", width: "100%" }}
               />
               <p className="p-2 mb-0 fw-bold">{cat.name}</p>
               <p className="text-muted small pb-2">{cat.productsCount} منتج</p>

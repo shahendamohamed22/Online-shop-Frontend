@@ -71,7 +71,7 @@ function ProductDetails() {
       fetchReviews();
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message ?? "حصل خطأ أثناء إضافة التقييم");
+      toast.error(error.response?.data?.message ?? "حدث خطأ أثناء إضافة التقييم");
     } finally {
       setSubmittingReview(false);
     }
@@ -247,7 +247,7 @@ function ProductDetails() {
         <div className="mt-5">
 
           <h3 className="fs-5 mb-3">
-            أضيف تقييمك
+            أضف تقييمك
           </h3>
 
           <form onSubmit={handleSubmitReview}>

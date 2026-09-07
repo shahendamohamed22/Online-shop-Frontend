@@ -34,7 +34,8 @@ function ProductCard({ product }) {
         </div>
 
         <Link to={`/product/${product.id}`}>
-          <img src={productImage} alt={product.name} className="w-100" />
+          <img src={productImage} alt={product.name} className="w-100" 
+            style={{height: "250px", objectFit: "contain",}}/>
         </Link>
 
         <div className="p-3 border-top border-2">

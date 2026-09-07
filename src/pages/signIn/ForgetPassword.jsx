@@ -2,24 +2,54 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import baseUrl from "../../services/Api";
+import { validateEmail } from "../../services/validation";
 
 function ForgotPassword() {
   const navigate = useNavigate();
+
   const [user, setUser] = useState({
-    email: ""
+    email: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   function handleChange(e) {
+    const { name, value } = e.target;
+
     setUser({
       ...user,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+
+    // إزالة الخطأ بمجرد ما المستخدم يبدأ يعدل
+    if (errors[name]) {
+      setErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[name];
+        return updated;
+      });
+    }
+  }
+
+  function validate() {
+    const newErrors = {};
+
+    const emailError = validateEmail(user.email);
+
+    if (emailError) {
+      newErrors.email = emailError;
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    console.log(user.email);
+    // Frontend validation
+    if (!validate()) return;
 
     try {
       const response = await axios.post(
@@ -30,21 +60,36 @@ function ForgotPassword() {
       console.log(response.data);
 
       localStorage.setItem("email", user.email);
-      console.log("save is done");
 
       navigate("/verifyCode");
-      console.log("Navigate is done");
-
-
     } catch (error) {
       console.log("STATUS:", error.response?.status);
       console.log("DATA:", error.response?.data);
+
+      const backendErrors = error.response?.data?.errors;
+
+      if (backendErrors?.Email) {
+        setErrors({
+          email: backendErrors.Email[0],
+        });
+      } else if (error.response?.data?.message) {
+        setErrors({
+          email: error.response.data.message,
+        });
+      } else {
+        setErrors({
+          email: "حدث خطأ أثناء إرسال طلب استعادة كلمة السر",
+        });
+      }
     }
   }
 
   return (
-    <div className="min-vh-100 d-flex align-items-center justify-content-center ">
-      <div style={{ width: "100%", maxWidth: "500px" }} className="px-3">
+    <div className="min-vh-100 d-flex align-items-center justify-content-center">
+      <div
+        style={{ width: "100%", maxWidth: "500px" }}
+        className="px-3"
+      >
         <form
           onSubmit={handleSubmit}
           className="shadow-lg rounded p-4 mx-auto"
@@ -65,13 +110,20 @@ function ForgotPassword() {
 
             <input
               type="email"
-              className="form-control"
+              className={`form-control ${
+                errors.email ? "is-invalid" : ""
+              }`}
               placeholder="Enter your email"
               name="email"
               value={user.email}
               onChange={handleChange}
-              required
             />
+
+            {errors.email && (
+              <div className="text-danger small mt-1">
+                {errors.email}
+              </div>
+            )}
           </div>
 
           <button
@@ -81,7 +133,7 @@ function ForgotPassword() {
             Send Reset Link
           </button>
 
-          <p className="text-center mt-4">
+          <p className="text-center mt-4 mb-0">
             Remember your password?{" "}
             <Link to="/login">
               Login

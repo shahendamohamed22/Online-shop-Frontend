@@ -36,13 +36,13 @@ function SubCategories() {
             <Link
               key={sub.id}
               to={targetPath}
-              className="col-6 col-md-4 col-lg-3 text-decoration-none text-black"
+              className="col-12 col-md-6 text-decoration-none text-black"
             >
               <div className="border rounded-4 overflow-hidden shadow text-center">
                 <img
                   src={sub.imageUrl}
                   alt={sub.name}
-                  style={{ height: "150px", objectFit: "cover" }}
+                  style={{ height: "200px", objectFit: "cover" }}
                 />
                 <p className="p-2 mb-0 fw-bold">{sub.name}</p>
                 <p className="text-muted small pb-2">{sub.productsCount} منتج</p>
