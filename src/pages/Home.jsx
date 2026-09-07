@@ -77,19 +77,6 @@ function Home() {
         </div>
       </section>
 
-      <section className="container sales mt-4">
-        <header className="pe-2">
-          <h2 className="section-title fw-bold">الخصومات</h2>
-        </header>
-        <div className="row g-3 mt-3">
-          {discountedProducts.length === 0 ? (
-            <p className="text-muted">لا توجد خصومات حاليًا.</p>
-          ) : (
-            discountedProducts.map((product) => <ProductCard key={product.id} product={product} />)
-          )}
-        </div>
-      </section>
-
       <section className="container mt-5 mb-5">
         <header className="pe-2">
           <h2 className="section-title fw-bold">العروض</h2>
@@ -99,6 +86,19 @@ function Home() {
             <p className="text-muted">لا توجد عروض نشطة حاليًا.</p>
           ) : (
             offers.map((offer) => <OfferCard key={offer.id} offer={offer} />)
+          )}
+        </div>
+      </section>
+
+      <section className="container sales mt-4">
+        <header className="pe-2">
+          <h2 className="section-title fw-bold">الخصومات</h2>
+        </header>
+        <div className="row g-3 mt-3">
+          {discountedProducts.length === 0 ? (
+            <p className="text-muted">لا توجد خصومات حاليًا.</p>
+          ) : (
+            discountedProducts.map((product) => <ProductCard key={product.id} product={product} />)
           )}
         </div>
       </section>

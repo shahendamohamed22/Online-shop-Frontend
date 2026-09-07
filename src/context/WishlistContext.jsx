@@ -1,11 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../services/axiosInstance";
-
-// اتغيّرت بالكامل من نسخة الـ localStorage للنسخة اللي بتتكلم مع الباك اند الحقيقي
-// (GET/POST/DELETE /api/wishlist)، عشان المفضلة تبقى محفوظة على حساب المستخدم نفسه
-// مش على المتصفح بس، وتفضل موجودة حتى لو غيّر جهاز.
-// الـ endpoints دي "Customer Only" يعني لازم تسجيل دخول (فيه توكن في localStorage).
+import { useAuth } from "./AuthContext";
 
 const WishlistContext = createContext();
 
@@ -13,9 +9,10 @@ export function WishlistProvider({ children }) {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const { isAuthenticated, loading: authLoading } = useAuth();
+
   const fetchWishlist = useCallback(async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!isAuthenticated) {
       setWishlistItems([]);
       return;
     }
@@ -31,19 +28,19 @@ export function WishlistProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    if (authLoading) return;
+
     fetchWishlist();
-  }, [fetchWishlist]);
+  }, [authLoading, fetchWishlist]);
 
   const isInWishlist = (productId) =>
     wishlistItems.some((item) => item.productId === productId);
 
   const toggleWishlist = async (productId) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.info("سجّل دخول الأول ");
+    if (!isAuthenticated) {
+      toast.info("سجّل دخول الأول");
       return;
     }
-
     const alreadyIn = isInWishlist(productId);
     try {
       if (alreadyIn) {
@@ -51,7 +48,6 @@ export function WishlistProvider({ children }) {
         setWishlistItems((prev) => prev.filter((item) => item.productId !== productId));
       } else {
         await axiosInstance.post(`/api/wishlist/${productId}`);
-        // بعد الإضافة، بنعيد جلب القائمة عشان ناخد بيانات المنتج كاملة من الباك اند
         fetchWishlist();
       }
     } catch (error) {

@@ -6,6 +6,8 @@ import { GoogleLogin } from "@react-oauth/google";
 import baseUrl from "../../services/Api";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useAuth } from "../../context/AuthContext";
+
 import {
   validateRequired,
   validateEmail,
@@ -17,6 +19,8 @@ import {
 
 function Register() {
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const { refetchCart } = useCart();
   const { refetchWishlist } = useWishlist();
   const [user, setUser] = useState({
@@ -91,7 +95,7 @@ function Register() {
         registerData
       );
 
-      localStorage.setItem("token", response.data.token);
+      await login(response.data.token);
 
       await refetchCart();
       await refetchWishlist();
@@ -121,11 +125,12 @@ function Register() {
 
         navigate("/CompleteGoogleProfile");
       } else {
-        localStorage.setItem("token", res.data.token);
-
+        await login(res.data.token);
+        
         await refetchCart();
         await refetchWishlist();
-
+        
+        toast.success("تم تسجيل الدخول بنجاح");
         navigate("/");
       }
     }

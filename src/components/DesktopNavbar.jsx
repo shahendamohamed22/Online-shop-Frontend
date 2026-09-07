@@ -1,11 +1,15 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import logo from "../assets/imgs/logo.png";
+import { useAuth } from "../context/AuthContext";
 
 function DesktopNav() {
     const linkClass = ({ isActive }) =>
-    `text-black ${
-      isActive ? " active-nav" : ""
-    }`;
+        `text-black ${isActive ? " active-nav" : ""
+        }`;
+
+    const { isAuthenticated } = useAuth();
+
+    const location = useLocation();
 
     return (
         <header className="d-none d-lg-block bg-main shadow-sm fixed-top">
@@ -77,8 +81,8 @@ function DesktopNav() {
 
                         </Link>
 
-      
-                       <Link to={localStorage.getItem("token") ? "/profile" : "/Login"}
+
+                        <Link to={isAuthenticated ? "/profile" : "/Login"}
                             className="text-dark"
                         >
                             <i className="fa-solid fa-user fs-4"></i>
@@ -107,7 +111,14 @@ function DesktopNav() {
                             </li>
 
                             <li className="fs-5">
-                                <NavLink to="/shop" className={linkClass}>
+                                <NavLink to="/shop" className={({ isActive }) =>
+                                    linkClass({
+                                        isActive:
+                                            isActive ||
+                                            location.pathname.startsWith("/SubCategories/") ||
+                                            location.pathname.startsWith("/Products/") ||
+                                            location.pathname.startsWith("/product/"),
+                                    })}>
                                     <i className="fa-solid fa-shop ms-2"></i>
                                     المتجر
                                 </NavLink>
@@ -134,7 +145,7 @@ function DesktopNav() {
 
             </div>
 
-        </header>
+        </header >
     );
 }
 

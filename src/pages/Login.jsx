@@ -5,10 +5,12 @@ import { GoogleLogin } from "@react-oauth/google";
 import baseUrl from "../services/Api";
 import { validateEmail, validateRequired } from "../services/validation";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 
 function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [user, setUser] = useState({
         email: "",
         password: "",
@@ -56,7 +58,7 @@ function Login() {
             );
             console.log("Login Success");
 
-            localStorage.setItem("token", response.data.token);
+            await login(response.data.token);
             toast.success("تم تسجيل الدخول بنجاح");
             navigate("/");
 
@@ -83,8 +85,8 @@ function Login() {
 
                 navigate("/CompleteGoogleProfile");
             } else {
-                localStorage.setItem("token", res.data.token);
-
+                await login(res.data.token);
+                toast.success("تم تسجيل الدخول بنجاح");
                 navigate("/");
             }
         }

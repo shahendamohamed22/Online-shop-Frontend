@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/imgs/logo.png";
+import { useAuth } from "../context/AuthContext";
+
 
 function Header() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <header className="d-lg-none bg-main p-3 py-3 shadow container-fluid">
       <div className="row justify-content-between">
@@ -18,7 +22,7 @@ function Header() {
           </Link>
         </div>
         <div className="col-2 d-flex align-items-center justify-content-end">
-          <Link to={localStorage.getItem("token") ? "/profile" : "/Login"}>
+          <Link to={isAuthenticated ? "/profile" : "/Login"}>
             <i className="fa-solid fa-user fa-xl text-black"></i>
           </Link>
         </div>

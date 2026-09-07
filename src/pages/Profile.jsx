@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosInstance";
 import OrdersPreview from "./orders/OrdersPreview";
 import { validatePhone, validateRequired, validatePassword } from "../services/validation";
+import { useAuth } from "../context/AuthContext";
 
-// صفحة جديدة - بتستخدم:
-// GET /api/customer/profile, PUT /api/customer/profile, PUT /api/customer/profile/change-password
 function Profile() {
   const [profile, setProfile] = useState(null);
   const [branches, setBranches] = useState([]);
@@ -17,6 +16,8 @@ function Profile() {
   const [changingPassword, setChangingPassword] = useState(false);
 
   const [errors, setErrors] = useState({});
+
+  const { logout } = useAuth();
 
   const navigate = useNavigate();
 
@@ -152,7 +153,7 @@ function Profile() {
   if (!profile) return <p className="container mt-4">محتاج تسجّل دخول الأول.</p>;
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     toast.success("تم تسجيل الخروج بنجاح");
     navigate("/");
   };

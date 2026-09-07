@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../services/axiosInstance";
-import { useWishlist } from "../context/WishlistContext";
-import { useCart } from "../context/CartContext";
+import axiosInstance from "../../services/axiosInstance";
+import { useWishlist } from "../../context/WishlistContext";
+import { useCart } from "../../context/CartContext";
 
 // اتحولت بالكامل من بيانات محلية (data/products.js) لبيانات حقيقية من الـ API:
 // - تفاصيل المنتج: GET /api/product/:id (عام، مش محتاج تسجيل دخول)

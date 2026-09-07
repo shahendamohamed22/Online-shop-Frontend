@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axiosInstance from "../services/axiosInstance";
-import ProductCard from "../components/ProductCard";
+import axiosInstance from "../../services/axiosInstance";
+import ProductCard from "../../components/ProductCard";
 
 function Products() {
   const { categoryId } = useParams();
