@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { chat } from "../services/googleGemini";
-
+import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const STORAGE_KEY = "chatbot_messages";
 
 function Chatbot() {
+    const { isAuthenticated } = useAuth();
 
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState(() => {
@@ -36,6 +38,11 @@ function Chatbot() {
 
     const handleSend = async (e) => {
         e.preventDefault();
+
+        if (!isAuthenticated) {
+            toast.info("سجل دخول الأول عشان تستخدم المساعد الذكي");
+            return;
+        }
 
         if (!input.trim()) return;
 
