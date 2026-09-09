@@ -1,4 +1,5 @@
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import logo from "../assets/imgs/logo.png";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
@@ -13,6 +14,15 @@ function DesktopNav() {
     const location = useLocation();
 
     const { cartCount } = useCart();
+
+    const navigate = useNavigate();
+    const [keyword, setKeyword] = useState("");
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (!keyword.trim()) return;
+        navigate(`/search?keyword=${encodeURIComponent(keyword.trim())}`);
+    };
 
     return (
         <header className="d-none d-lg-block bg-main shadow-sm fixed-top">
@@ -47,22 +57,18 @@ function DesktopNav() {
                         className="mx-5 flex-grow-1"
                         style={{ maxWidth: "650px" }}
                     >
-                        <div
-                            className="input-group overflow-hidden"
-                            style={{ borderRadius: "30px" }}
-                        >
+                        <form onSubmit={handleSearch} className="input-group overflow-hidden" style={{ borderRadius: "30px" }}>
                             <input
                                 type="text"
                                 className="form-control border-end-0 py-2"
                                 placeholder="Search products..."
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
                             />
-
-                            <button
-                                className="btn btn-light border border-start-0"
-                            >
+                            <button type="submit" className="btn btn-light border border-start-0">
                                 <i className="fa-solid fa-magnifying-glass"></i>
                             </button>
-                        </div>
+                        </form>
                     </div>
 
                     {/* Icons */}

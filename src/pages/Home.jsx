@@ -9,10 +9,6 @@ import slider1 from "../assets/imgs/slider-1.avif";
 import slider2 from "../assets/imgs/slider-2.avif";
 import slider3 from "../assets/imgs/slider-3.avif";
 
-// اتحولت من بيانات وهمية محلية لبيانات حقيقية:
-// - قسم "الخصومات": GET /api/product (عام) وبنفلتر اللي عليه hasDiscount محليًا
-// - قسم "العروض": GET /api/offer/active (عام)
-
 function Home() {
   const [offers, setOffers] = useState([]);
   const [discountedProducts, setDiscountedProducts] = useState([]);
@@ -49,7 +45,7 @@ function Home() {
   return (
     <>
       <section className="container">
-        <div id="carouselExampleIndicators" className="carousel slide w-lg-50">
+        <div id="carouselExampleIndicators" className="carousel slide w-lg-50" data-bs-ride="carousel" data-bs-interval="3000">
           <div className="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>

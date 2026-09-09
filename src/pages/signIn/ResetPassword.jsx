@@ -2,10 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import baseUrl from "../../services/Api";
-import {
-  validatePassword,
-  validateConfirmPassword,
-} from "../../services/validation";
+import {validatePassword,  validateConfirmPassword,} from "../../services/validation";
+import { toast } from "react-toastify";
 
 function ResetPassword() {
   const navigate = useNavigate();
@@ -108,7 +106,7 @@ function ResetPassword() {
         });
       } else {
         setErrors({
-          password: "حصل خطأ أثناء تغيير كلمة السر",
+          password: "حدث خطأ أثناء تغيير كلمة السر",
         });
       }
     }

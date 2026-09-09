@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 
 function Header() {
   const { isAuthenticated } = useAuth();
-const { cartCount } = useCart();
+  const { cartCount } = useCart();
   return (
     <header className="d-lg-none bg-main p-3 py-3 shadow container-fluid">
       <div className="row justify-content-between">
@@ -22,7 +22,9 @@ const { cartCount } = useCart();
               </span>
             )}
           </Link>
-          <i className="fa-solid fa-magnifying-glass fa-xl"></i>
+          <Link to="/search" className="text-dark">
+            <i className="fa-solid fa-magnifying-glass fa-xl"></i>
+          </Link>
         </div>
         <div className="col-6 d-flex align-items-center justify-content-center gap-2">
           <Link to="/" className="d-flex align-items-center gap-2 text-black">

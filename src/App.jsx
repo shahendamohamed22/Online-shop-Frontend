@@ -22,6 +22,7 @@ import ResetPassword from "./pages/signIn/ResetPassword";
 import VerifyCode from "./pages/signIn/verifyCode";
 import CompleteGoogleProfile from "./pages/signIn/CompleteGoogleProfile";
 import OfferCheckout from "./pages/OfferCheckout";
+import SearchResults from "./pages/SearchResults";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
               <Route path="/SubCategories/:categoryId" element={<SubCategories />} />
               <Route path="/Products/:categoryId" element={<Products />} />
               <Route path="offer/:offerId/checkout" element={<OfferCheckout />} />
+              <Route path="search" element={<SearchResults />} />
             </Route>
             <Route path="Login" element={<Login />} />
             <Route path="Register" element={<Register />} />

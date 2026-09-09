@@ -210,17 +210,41 @@ main {
 
 
 .main-image-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  border-radius: 8px;
+  height: 500px;
+  border-radius: 10px;
   overflow: hidden;
   border: 1px solid #eee;
   background-color: #fafafa;
+}
+
+.main-image-box img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  transition: .3s all;
 }
 
 
 /* تأثير خفيف عند تمرير الماوس فوق الصورة الأساسية */
 .main-image-box img:hover {
   transform: scale(1.1);
+}
+
+@media (max-width: 991px) {
+  .main-image-box {
+    height: 400px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .main-image-box {
+    height: 350px;
+  }
 }
 
 
@@ -237,6 +261,7 @@ main {
   border: 1px solid #ddd;
   border-radius: 6px;
   overflow: hidden;
+  width: fit-content;
 }
 
 .qty-btn {

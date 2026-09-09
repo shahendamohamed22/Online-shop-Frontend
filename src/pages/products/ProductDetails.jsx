@@ -91,17 +91,17 @@ function ProductDetails() {
   const mainImage = product.images?.[0]?.url;
 
   return (
-    <main className="container py-5">
+    <main className="container">
 
       {/* Product Info */}
-      <section className="row g-5 align-items-center">
+      <section className="row g-3 g-lg-5 align-items-center">
 
         {/* Product Image */}
         <div className="col-12 col-lg-6">
           <div className="main-image-box">
             <img
               src={mainImage}
-              alt={product.name}
+              alt={product.name} style={{height:"500px"}}
               id="main-product-img"
               className="w-100"
             />
@@ -112,9 +112,9 @@ function ProductDetails() {
         <div className="col-12 col-lg-6">
 
           <div className="d-flex justify-content-between align-items-start">
-            <h1 className="fs-1 fw-bold mb-3">
+            <h2 className="fs-1 fw-bold mb-3 ">
               {product.name}
-            </h1>
+            </h2>
 
             <i
               className={`heart fa-solid fa-heart fa-xl ${inWishlist ? "main-color" : "color-gray"
@@ -260,7 +260,7 @@ function ProductDetails() {
           <form onSubmit={handleSubmitReview}>
 
             <div className="mb-3">
-              <div className="d-flex justify-content-end align-items-center gap-1"
+              <div className="d-flex justify-content-end align-items-center gap-1 flex-wrap"
                 style={{ direction: "ltr" }}>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <span
@@ -272,6 +272,7 @@ function ProductDetails() {
                       width: "35px",
                       height: "35px",
                       cursor: "pointer",
+                      flexShrink: 0,
                     }}
                   >
                     {/* النجمة الفاضية */}
