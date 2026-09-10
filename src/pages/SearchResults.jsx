@@ -3,7 +3,6 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosInstance from "../services/axiosInstance";
 import ProductCard from "../components/ProductCard";
-import { useAuth } from "../context/AuthContext";
 
 function SearchResults() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -13,24 +12,12 @@ function SearchResults() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     
-    const navigate = useNavigate();
-
-    const { isAuthenticated, loading: authLoading } = useAuth();
-    
     useEffect(() => {
         setInputValue(keyword);
         
         const fetchResults = async () => {
             if (!keyword.trim()) {
                 setProducts([]);
-                return;
-            }
-            
-
-            if (authLoading) return;
-
-            if (!isAuthenticated) {
-                toast.info("سجّل دخول الأول عشان تقدر تبحث عن منتجات");
                 return;
             }
 
@@ -43,8 +30,7 @@ function SearchResults() {
             } catch (error) {
                 console.log(error);
                 if (error.response?.status === 401) {
-                    toast.info("سجّل دخول الأول عشان تقدر تبحث عن منتجات");
-                    navigate("/Login");
+                    toast.info("لا يمكن البحث حاليا");
                 }
                 setProducts([]);
             } finally {
